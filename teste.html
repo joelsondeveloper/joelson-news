@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JoelsonNews</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+    header {
+      background: #005bbb;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    #noticias {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .noticia {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .noticia img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-top: 0.5rem;
+    }
+    .noticia a {
+      display: inline-block;
+      margin-top: 0.5rem;
+      color: #005bbb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JoelsonNews</h1>
+    <p>Notícias do Brasil sobre IA</p>
+  </header>
+
+  <div id="noticias"></div>
+
+  <script>
+    const apiKey = "15dd9a729f88b78eb2f7e20f28f2ac3e"; // coloque sua chave aqui
+    const container = document.getElementById("noticias");
+    let page = 1;
+    const maxPerPage = 10;
+    let carregando = false;
+    let exibidas = new Set();
+
+    async function carregarNoticias() {
+      if (carregando) return;
+      carregando = true;
+
+      const url = `https://gnews.io/api/v4/search?q=IA&lang=pt&country=br&max=${maxPerPage}&page=${page}&apikey=${apiKey}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data.articles || data.articles.length === 0) return;
+
+        data.articles.forEach(noticia => {
+          if (exibidas.has(noticia.url)) return; // evita repetição
+          exibidas.add(noticia.url);
+
+          const div = document.createElement("div");
+          div.classList.add("noticia");
+          div.innerHTML = `
+            <h2>${noticia.title}</h2>
+            ${noticia.image ? `<img src="${noticia.image}" alt="Imagem"/>` : ''}
+            <p>${noticia.description || ''}</p>
+            <a href="${noticia.url}" target="_blank">Leia mais</a>
+          `;
+          container.appendChild(div);
+        });
+
+        page++; // incrementa para próxima página
+        carregando = false;
+      } catch (err) {
+        console.error("Erro ao carregar notícias:", err);
+        carregando = false;
+      }
+    }
+
+    // scroll infinito
+    window.addEventListener("scroll", () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+        carregarNoticias();
+      }
+    });
+
+    // carrega primeira página
+    carregarNoticias();
+  </script>
+</body>
+</html>
