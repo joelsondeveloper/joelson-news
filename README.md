@@ -23,18 +23,15 @@ O projeto consome a [NewsAPI](https://newsapi.org/) e traz as últimas atualiza�
    cd joelson-news
 Instale as dependências:
 
-bash
-Copiar código
+## bash
 npm install
 Crie um arquivo .env na raiz e adicione sua chave da NewsAPI:
 
-ini
-Copiar código
+## ini
 VITE_NEWS_API_KEY=sua_chave_aqui
 Rode o projeto:
 
-bash
-Copiar código
+## bash
 npm run dev
 🎯 Próximos Passos
 Adicionar filtros por categoria (tecnologia, esportes, negócios…)
