@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@theme {
+    --color-azul-500: #1E293B;
+    --color-branco-500: #F8FAFC;
+    --color-cinza-500: #94A3B8;
+}
+
+@layer base {
+  body {
+    @apply bg-[#F8FAFC] text-[#1E293B];
+  }
+}
+
+button {
+  opacity: .9;
+  transition: all .2s ease-in-out;
+}
+
+button:hover {
+  opacity: 1;
+  scale: 1.03;
+}
